@@ -93,7 +93,7 @@ fn get_user_input() -> Result <Vec<String>, InteractiveError> {
         }
 
     let input_slices = input.split(" ").map(
-        |str| str.to_string()
+        |str| str.trim().to_string()
     ).collect::<Vec<String>>();
 
     Ok(input_slices)
