@@ -1,0 +1,10 @@
+======== Interactive Steam Table Utility =======
+This utility is for quickly finding properties of steam at different Temperatures and Pressure
+
+Author : Timothy Kandiado <kandiadot@gmail.com>
+Resources: Steam Tables from https://learncheme.com/student-resources/steam-tables/
+
+Usage:
+    saturated-steam <parameter> <temperature> # to query saturated steam
+    help to print help text
+    quit to exit the utility

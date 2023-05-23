@@ -1,0 +1,12 @@
+========== saturated-steam or ss =========
+saturated-steam <parameter> <value>
+recognized parameters are Temperature(T) and Pressure(P)
+Temperature is in degrees Celsius
+Pressure in MegaPascals
+examples:
+    saturated-steam temperature 100
+    ss t 100
+    saturated-steam pressure 2.5
+    ss p 2.5
+
+The parameters are case insensitive

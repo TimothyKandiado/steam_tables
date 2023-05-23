@@ -73,7 +73,8 @@ fn main() {
 }
 
 fn print_intro() {
-    println!("======= Welcome to Interactive Steam Table =========");
+    let intro = include_str!("../data/intro.txt");
+    println!("{}", intro);
 }
 
 fn get_user_input() -> Result <Vec<String>, InteractiveError> {
@@ -104,10 +105,23 @@ fn handle_user_input(user_input: Vec<String>, table_holder: &TableHolder) -> Res
         return Ok(InteractiveState::Stop);
     }
 
+    if user_input[0].as_str().to_lowercase() == "help" {
+        print_help(user_input)?;
+        return Ok(InteractiveState::Continue);
+    }
+
+    if user_input.len() < 2 {
+        let input = vec!["help".to_string(), user_input[0].to_owned()];
+        print_help(input)?;
+        return Ok(InteractiveState::Continue);
+    }
+
     if user_input[0].as_str().to_lowercase() == "saturated-steam" || 
         user_input[0].as_str().to_lowercase() == "ss" {
             query_saturated_steam(user_input, table_holder)?;
     }
+
+    
 
     Ok(InteractiveState::Continue)
 }
@@ -161,8 +175,33 @@ fn print_outro() {
 
 }
 
-fn print_help() {
+fn print_help(user_input: Vec<String>) -> Result<InteractiveState, InteractiveError> {
+    if user_input.len() == 1 {
+        print_complete_help();
+    }
 
+    else if user_input.len() > 1 {
+        let help_option = user_input[1].to_owned();
+        if help_option.to_lowercase().as_str() == "saturated-steam" ||
+            help_option.to_lowercase().as_str() == "ss" {
+                print_saturated_steam_help();
+            }
+        else {
+            return Err(InteractiveError::UnRecognizedParameter(help_option));
+        }
+    }
+
+    Ok(InteractiveState::Continue)
+}
+
+fn print_complete_help() {
+    let help = include_str!("../data/help.txt");
+    println!("{}", help);
+}
+
+fn print_saturated_steam_help() {
+    let help = include_str!("../data/saturated_steam_help.txt");
+    println!("{}",help);
 }
 
 #[derive(Debug)]
