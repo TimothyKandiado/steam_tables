@@ -1,6 +1,6 @@
 use std::{println, print, io::{self, Write}};
 
-use steam_tables::{SteamTable, data, error::Error};
+use steam_tables::{saturated_steam::SteamTable, data, error::Error};
 
 
 const PROMPT: &str = "--->";

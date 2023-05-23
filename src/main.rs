@@ -1,6 +1,6 @@
 use std::println;
 
-use steam_tables::{SteamTable, data};
+use steam_tables::{saturated_steam::SteamTable, data};
 
 fn main() {
     temperature_table();
