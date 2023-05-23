@@ -1,11 +1,15 @@
 pub mod data;
 pub mod error;
 pub mod saturated_steam;
+pub mod water;
 
 mod math;
-mod datapoint;
 
+fn get_headers_from_string(header_string: &str) -> Vec<String> {
+    let headers: Vec<String> = header_string
+        .split(',')
+        .map(|header| header.to_string())
+        .collect();
 
-
-
-
+    headers
+}

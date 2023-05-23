@@ -1,6 +1,6 @@
 use std::println;
 
-use steam_tables::{saturated_steam::SteamTable, data};
+use steam_tables::{data, saturated_steam::SteamTable};
 
 fn main() {
     temperature_table();
@@ -9,7 +9,7 @@ fn main() {
 
 fn pressure_table() {
     let steam_table = SteamTable::new(data::SATURATED_BY_PRESSURE_TABLE.to_string()).unwrap();
-    
+
     let values = steam_table.get_values_at_point(1.0).unwrap();
 
     print_data(values);
@@ -25,7 +25,7 @@ fn pressure_table() {
 
 fn temperature_table() {
     let steam_table = SteamTable::new(data::SATURATED_BY_TEMPERATURE_TABLE.to_string()).unwrap();
-    
+
     let values = steam_table.get_values_at_point(0.01).unwrap();
 
     print_data(values);
