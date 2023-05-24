@@ -67,13 +67,9 @@ impl WaterTable {
     }
 
     fn get_water_point(&self, pressure: f32, temperature: f32) -> WaterPoint {
-        let water_point = self
-            .value_points
-            .iter()
-            .filter(|value_point| {
-                value_point.point.0 == pressure && value_point.point.1 == temperature
-            })
-            .next();
+        let water_point = self.value_points.iter().find(|value_point| {
+            value_point.point.0 == pressure && value_point.point.1 == temperature
+        });
 
         water_point.unwrap().clone()
     }
@@ -132,10 +128,7 @@ impl WaterTable {
             labelled_data.push((headers.next().unwrap().to_owned(), value.to_string()));
         });
 
-        labelled_data.push((
-            headers.next().unwrap().to_owned(),
-            waterpoint.phase,
-        ));
+        labelled_data.push((headers.next().unwrap().to_owned(), waterpoint.phase));
 
         labelled_data
     }

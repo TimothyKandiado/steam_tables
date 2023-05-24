@@ -23,8 +23,8 @@ pub fn parse_to_water_point_struct(lines: Vec<String>) -> Result<Vec<WaterPoint>
             for point_value in values {
                 let float_value = point_value.trim().parse::<f32>();
 
-                if float_value.is_ok() {
-                    point_values.push(float_value.unwrap())
+                if let Ok(value) = float_value {
+                    point_values.push(value);
                 } else {
                     phase = point_value.to_owned().to_string();
                 }

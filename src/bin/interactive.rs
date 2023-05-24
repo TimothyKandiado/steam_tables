@@ -194,17 +194,20 @@ fn query_saturated_steam_at_parameter(
 fn print_outro() {}
 
 fn print_help(user_input: Vec<String>) -> Result<InteractiveState, InteractiveError> {
-    if user_input.len() == 1 {
-        print_complete_help();
-    } else if user_input.len() > 1 {
-        let help_option = user_input[1].to_owned();
-        if help_option.to_lowercase().as_str() == "saturated-steam"
-            || help_option.to_lowercase().as_str() == "ss"
-        {
-            print_saturated_steam_help();
-        } else {
-            return Err(InteractiveError::UnRecognizedParameter(help_option));
+    match user_input.len() {
+        1 => print_complete_help(),
+
+        2.. => {
+            let help_option = user_input[1].to_owned();
+            if help_option.to_lowercase().as_str() == "saturated-steam"
+                || help_option.to_lowercase().as_str() == "ss"
+            {
+                print_saturated_steam_help();
+            } else {
+                return Err(InteractiveError::UnRecognizedParameter(help_option));
+            }
         }
+        _ => {}
     }
 
     Ok(InteractiveState::Continue)

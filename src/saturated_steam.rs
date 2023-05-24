@@ -86,9 +86,7 @@ impl SteamTable {
         let smallest_point = self.smallest_valid_point();
         let largest_point = self.largest_valid_point();
 
-        if point < smallest_point {
-            return Err(Error::ValueOutOfRange(smallest_point, largest_point));
-        } else if point > largest_point {
+        if point < smallest_point || point > largest_point {
             return Err(Error::ValueOutOfRange(smallest_point, largest_point));
         }
 
@@ -96,13 +94,11 @@ impl SteamTable {
     }
 
     pub fn smallest_valid_point(&self) -> f32 {
-        
         self.datapoints[0].point
     }
 
     pub fn largest_valid_point(&self) -> f32 {
         let datapoints_length = self.datapoints.len();
-        
 
         self.datapoints[datapoints_length - 1].point
     }
