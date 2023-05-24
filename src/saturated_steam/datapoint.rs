@@ -8,9 +8,7 @@ pub struct DataPoint {
 }
 
 pub fn parse_to_datapoint_struct(lines: Vec<String>) -> Result<Vec<DataPoint>, Error> {
-    let datapoints: Vec<DataPoint>;
-
-    datapoints = lines
+    let datapoints = lines
         .iter()
         .map(|line| {
             let mut data_points = line
@@ -18,7 +16,7 @@ pub fn parse_to_datapoint_struct(lines: Vec<String>) -> Result<Vec<DataPoint>, E
                 .map(|value| value.parse::<f32>().expect("could not parse float"));
 
             let point = data_points.next().expect("no value taken");
-            let values: Vec<f32> = data_points.map(|value| value).collect();
+            let values: Vec<f32> = data_points.collect();
 
             DataPoint { point, values }
         })
@@ -50,9 +48,7 @@ pub fn interpolate_data_points(
 
             let point1 = Point2(upper_bound, pair.1);
 
-            let value = linear_interpolate(point, point0, point1);
-
-            value
+            linear_interpolate(point, point0, point1)
         })
         .collect();
 

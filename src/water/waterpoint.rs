@@ -14,15 +14,21 @@ pub fn parse_to_water_point_struct(lines: Vec<String>) -> Result<Vec<WaterPoint>
         .iter()
         .map(|line| {
             let mut values = line.split(',');
-            let point0 = values.next().unwrap().parse::<f32>();
-            let point1 = values.next().unwrap().parse::<f32>();
+            let point0 = values.next().unwrap().trim().parse::<f32>();
+            let point1 = values.next().unwrap().trim().parse::<f32>();
 
-            let point_values: Vec<f32> = values
-                .clone()
-                .filter_map(|value| value.parse::<f32>().ok())
-                .collect();
+            let mut point_values: Vec<f32> = Vec::new();
+            let mut phase = String::new();
 
-            let phase = values.last().unwrap().to_string();
+            while let Some(point_value) = values.next() {
+                let float_value = point_value.trim().parse::<f32>();
+
+                if float_value.is_ok() {
+                    point_values.push(float_value.unwrap())
+                } else {
+                    phase = point_value.to_owned().to_string();
+                }
+            }
 
             WaterPoint {
                 point: (point0.unwrap(), point1.unwrap()),
@@ -36,44 +42,56 @@ pub fn parse_to_water_point_struct(lines: Vec<String>) -> Result<Vec<WaterPoint>
 }
 
 pub fn interpolate_water_points(
-    pressure: f32, 
+    pressure: f32,
     temperature: f32,
     water_point_0_0: WaterPoint,
     water_point_0_1: WaterPoint,
     water_point_1_0: WaterPoint,
-    water_point_1_1: WaterPoint
-    ) -> WaterPoint {
+    water_point_1_1: WaterPoint,
+) -> WaterPoint {
+    let number_of_values = water_point_0_0.values.len();
 
-        let number_of_values = water_point_0_0.values.len();
+    let values: Vec<f32> = (0..number_of_values)
+        .into_iter()
+        .map(|index| {
+            let point_0_0 = Point3(
+                water_point_0_0.point.0,
+                water_point_0_0.point.1,
+                water_point_0_0.values[index],
+            );
 
-        let values: Vec<f32> = (0..number_of_values).into_iter().map(
-            |index| {
-                let point_0_0 = Point3(
-                    water_point_0_0.point.0, 
-                    water_point_0_0.point.1, 
-                    water_point_0_0.values[index]);
+            let point_0_1 = Point3(
+                water_point_0_1.point.0,
+                water_point_0_1.point.1,
+                water_point_0_1.values[index],
+            );
 
-                let point_0_1 = Point3(
-                    water_point_0_1.point.0, 
-                    water_point_0_1.point.1, 
-                    water_point_0_1.values[index]);
+            let point_1_0 = Point3(
+                water_point_1_0.point.0,
+                water_point_1_0.point.1,
+                water_point_1_0.values[index],
+            );
 
-                let point_1_0 = Point3(
-                    water_point_1_0.point.0, 
-                    water_point_1_0.point.1, 
-                    water_point_1_0.values[index]);
+            let point_1_1 = Point3(
+                water_point_1_1.point.0,
+                water_point_1_1.point.1,
+                water_point_1_1.values[index],
+            );
 
-                let point_1_1 = Point3(
-                    water_point_1_1.point.0, 
-                    water_point_1_1.point.1, 
-                    water_point_1_1.values[index]);
+            double_linear_interpolate(
+                pressure,
+                temperature,
+                point_0_0,
+                point_0_1,
+                point_1_0,
+                point_1_1,
+            )
+        })
+        .collect();
 
-            double_linear_interpolate(pressure, temperature, point_0_0, point_0_1, point_1_0, point_1_1)
-            }
-        ).collect();
-
-        WaterPoint { point: (pressure, temperature),
-             values, 
-             phase: water_point_0_0.phase
-             }
+    WaterPoint {
+        point: (pressure, temperature),
+        values,
+        phase: water_point_0_0.phase,
+    }
 }

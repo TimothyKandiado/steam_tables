@@ -81,10 +81,12 @@ mod tests {
         let point_1_0 = Point3(15.0, 100.0, 1900.0);
         let point_1_1 = Point3(15.0, 200.0, 1920.0);
 
-
         let (x, y) = (10.0, 150.0); // interpolation points
         let u = 1960.0; // final answer
 
-        assert_eq!(double_linear_interpolate(x, y, point_0_0, point_0_1, point_1_0, point_1_1), u);
+        assert_eq!(
+            double_linear_interpolate(x, y, point_0_0, point_0_1, point_1_0, point_1_1),
+            u
+        );
     }
 }
