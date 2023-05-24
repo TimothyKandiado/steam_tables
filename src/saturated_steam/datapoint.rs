@@ -78,7 +78,7 @@ mod tests {
             values: vec![0.5, 0.5, 0.5, 0.5, 0.5],
         };
 
-        let lerp1 = interpolate_data_points(0.5, data_point_0.clone(), data_point_1.clone());
+        let lerp1 = interpolate_data_points(0.5, data_point_0.clone(), data_point_1);
         assert_eq!(lerp1, data_point_mid);
 
         let lerp2 = interpolate_data_points(0.0, data_point_0.clone(), data_point_0.clone());

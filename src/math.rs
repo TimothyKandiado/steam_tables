@@ -1,7 +1,7 @@
 pub fn linear_interpolate(x: f32, point0: Point2, point1: Point2) -> f32 {
-    let y = point0.1 + (x - point0.0) * (point1.1 - point0.1) / (point1.0 - point0.0);
+    
 
-    y
+    point0.1 + (x - point0.0) * (point1.1 - point0.1) / (point1.0 - point0.0)
 }
 
 /// Used when a value depends upon two values x, and y

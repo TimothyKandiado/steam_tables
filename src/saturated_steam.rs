@@ -13,7 +13,7 @@ impl SteamTable {
         let data_lines: Vec<&str> = data_table.lines().collect();
         println!("loaded {}", data_lines[0]);
 
-        let headers: Vec<String> = super::get_headers_from_string(&data_lines[6]);
+        let headers: Vec<String> = super::get_headers_from_string(data_lines[6]);
         let str_data: Vec<String> = data_lines[7..].iter().map(|str| str.to_string()).collect();
 
         let mut datapoints = parse_to_datapoint_struct(str_data)?;
@@ -41,8 +41,8 @@ impl SteamTable {
         let mut lower_bound = self.smallest_valid_point();
         let mut upper_bound = self.largest_valid_point();
 
-        let mut datapoint_iterator = self.datapoints.iter();
-        while let Some(datapoint) = datapoint_iterator.next() {
+        let datapoint_iterator = self.datapoints.iter();
+        for datapoint in datapoint_iterator {
             if datapoint.point <= point {
                 lower_bound = datapoint.point
             } else if datapoint.point > point {
@@ -63,11 +63,7 @@ impl SteamTable {
             .iter()
             .filter(|data_point| data_point.point == point);
 
-        if let Some(point) = data_point.next() {
-            Some(point.clone())
-        } else {
-            None
-        }
+        data_point.next().cloned()
     }
 
     fn merge_header_with_data_point(&self, data_point: DataPoint) -> Vec<(String, f32)> {
@@ -100,14 +96,14 @@ impl SteamTable {
     }
 
     pub fn smallest_valid_point(&self) -> f32 {
-        let smallest_point = self.datapoints[0].point;
-        smallest_point
+        
+        self.datapoints[0].point
     }
 
     pub fn largest_valid_point(&self) -> f32 {
         let datapoints_length = self.datapoints.len();
-        let largest_point = self.datapoints[datapoints_length - 1].point;
+        
 
-        largest_point
+        self.datapoints[datapoints_length - 1].point
     }
 }

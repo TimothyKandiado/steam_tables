@@ -134,7 +134,7 @@ impl WaterTable {
 
         labelled_data.push((
             headers.next().unwrap().to_owned(),
-            waterpoint.phase.to_owned(),
+            waterpoint.phase,
         ));
 
         labelled_data

@@ -20,7 +20,7 @@ pub fn parse_to_water_point_struct(lines: Vec<String>) -> Result<Vec<WaterPoint>
             let mut point_values: Vec<f32> = Vec::new();
             let mut phase = String::new();
 
-            while let Some(point_value) = values.next() {
+            for point_value in values {
                 let float_value = point_value.trim().parse::<f32>();
 
                 if float_value.is_ok() {
@@ -52,7 +52,6 @@ pub fn interpolate_water_points(
     let number_of_values = water_point_0_0.values.len();
 
     let values: Vec<f32> = (0..number_of_values)
-        .into_iter()
         .map(|index| {
             let point_0_0 = Point3(
                 water_point_0_0.point.0,

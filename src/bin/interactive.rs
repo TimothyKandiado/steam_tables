@@ -40,7 +40,7 @@ fn main() {
 
         match input_result {
             Ok(mut input) => {
-                if input.len() == 0 {
+                if input.is_empty() {
                     continue;
                 }
 
@@ -91,7 +91,7 @@ fn get_user_input() -> Result<Vec<String>, InteractiveError> {
     }
 
     let input_slices = input
-        .split(" ")
+        .split(' ')
         .map(|str| str.trim().to_string())
         .collect::<Vec<String>>();
 
