@@ -1,9 +1,10 @@
 use std::{
+    fmt::Display,
     io::{self, Write},
     print, println,
 };
 
-use steam_tables::{data, error::Error, saturated_steam::SteamTable};
+use steam_tables::{data, error::Error, saturated_steam::SteamTable, water::WaterTable};
 
 const PROMPT: &str = "--->";
 const ANSWER_BRACKET: &str = "---------------------------";
@@ -11,6 +12,7 @@ const ANSWER_BRACKET: &str = "---------------------------";
 struct TableHolder {
     pub saturated_by_temperature_table: SteamTable,
     pub saturated_by_pressure_table: SteamTable,
+    pub water_table: WaterTable,
 }
 
 impl TableHolder {
@@ -21,9 +23,13 @@ impl TableHolder {
         let saturated_by_pressure_table =
             SteamTable::new(data::SATURATED_BY_PRESSURE_TABLE.to_string()).unwrap();
 
+        let water_table =
+            WaterTable::new(data::COMPRESSED_LIQUID_SUPERHEATED_STEAM.to_string()).unwrap();
+
         TableHolder {
             saturated_by_temperature_table,
             saturated_by_pressure_table,
+            water_table,
         }
     }
 }
@@ -121,9 +127,52 @@ fn handle_user_input(
         || user_input[0].as_str().to_lowercase() == "ss"
     {
         query_saturated_steam(user_input, table_holder)?;
+    } else if user_input[0].as_str().to_lowercase() == "water"
+        || user_input[0].as_str().to_lowercase() == "w"
+    {
+        query_water(user_input, table_holder)?;
     }
 
     Ok(InteractiveState::Continue)
+}
+
+fn query_water(
+    user_input: Vec<String>,
+    table_holder: &TableHolder,
+) -> Result<(), InteractiveError> {
+    if user_input.len() < 3 {
+        return Err(InteractiveError::InputError(
+            "water requires two arguments pressure and temperature".to_string(),
+        ));
+    }
+
+    let pressure = user_input[1].as_str().parse::<f32>();
+    let temperature = user_input[2].as_str().parse::<f32>();
+
+    if pressure.is_err() || temperature.is_err() {
+        return Err(InteractiveError::InputError(
+            "use numbers as parameters of water".to_string(),
+        ));
+    }
+
+    let (pressure, temperature) = (pressure.unwrap(), temperature.unwrap());
+
+    let query_result = table_holder
+        .water_table
+        .get_values_at_point(pressure, temperature);
+
+    match query_result {
+        Ok(result) => {
+            print_data(result);
+        }
+        Err(_) => {
+            return Err(InteractiveError::InputError(
+                "Error querying water table, use valid values".to_string(),
+            ));
+        }
+    }
+
+    Ok(())
 }
 
 fn query_saturated_steam(
@@ -203,6 +252,11 @@ fn print_help(user_input: Vec<String>) -> Result<InteractiveState, InteractiveEr
                 || help_option.to_lowercase().as_str() == "ss"
             {
                 print_saturated_steam_help();
+            } else if help_option.to_lowercase().as_str() == "water"
+                || help_option.to_lowercase().as_str() == "w"
+            {
+                let water_help = include_str!("../data/water_help.txt");
+                println!("{}", water_help);
             } else {
                 return Err(InteractiveError::UnRecognizedParameter(help_option));
             }
@@ -237,7 +291,11 @@ enum InteractiveState {
     Stop,
 }
 
-fn print_data(data: Vec<(String, f32)>) {
+fn print_data<T, K>(data: Vec<(T, K)>)
+where
+    T: Display,
+    K: Display,
+{
     println!("{}\n", ANSWER_BRACKET);
     for value in data {
         println!("{}: {}", value.0, value.1);

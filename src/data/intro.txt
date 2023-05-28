@@ -5,6 +5,7 @@ Author : Timothy Kandiado <kandiadot@gmail.com>
 Resources: Steam Tables from https://learncheme.com/student-resources/steam-tables/
 
 Usage:
-    saturated-steam <parameter> <temperature> # to query saturated steam
+    saturated-steam <parameter> <value> # to query saturated steam
+    water <pressure> <temperature> # to query water properties
     help to print help text
     quit to exit the utility

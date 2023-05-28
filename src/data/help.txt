@@ -3,3 +3,4 @@ intepolates steam table data for specified parameters
 
 currently supports:
     saturated-steam
+    water

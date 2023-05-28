@@ -1,0 +1,9 @@
+========== water or w =========
+water <pressure> <temperature>
+Temperature is in degrees Celsius
+Pressure in MegaPascals
+examples:
+    water 0.1 100
+    w 0.1 100
+
+The parameters are case insensitive
