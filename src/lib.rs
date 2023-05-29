@@ -8,7 +8,7 @@ mod math;
 fn get_headers_from_string(header_string: &str) -> Vec<String> {
     let headers: Vec<String> = header_string
         .split(',')
-        .map(|header| header.to_string())
+        .map(|header| header.trim().to_string())
         .collect();
 
     headers
