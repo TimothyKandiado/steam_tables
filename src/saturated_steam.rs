@@ -11,7 +11,6 @@ pub struct SteamTable {
 impl SteamTable {
     pub fn new(data_table: String) -> Result<SteamTable, Error> {
         let data_lines: Vec<&str> = data_table.lines().collect();
-        println!("loaded {}", data_lines[0]);
 
         let headers: Vec<String> = super::get_headers_from_string(data_lines[6]);
         let str_data: Vec<String> = data_lines[7..].iter().map(|str| str.to_string()).collect();
