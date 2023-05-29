@@ -108,7 +108,8 @@ fn handle_user_input(
     user_input: Vec<String>,
     table_holder: &TableHolder,
 ) -> Result<InteractiveState, InteractiveError> {
-    if user_input[0].as_str().to_lowercase() == "quit" {
+    if user_input[0].as_str().to_lowercase() == "quit" 
+        || user_input[0].as_str().to_lowercase() == "q" {
         return Ok(InteractiveState::Stop);
     }
 
