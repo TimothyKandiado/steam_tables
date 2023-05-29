@@ -29,23 +29,51 @@ impl WaterTable {
         &self,
         pressure: f32,
         temperature: f32,
-    ) -> Result<Vec<(String, String)>, Error> {
+    ) -> Result<WaterPoint, Error> {
         let pressure_bounds = self.find_pressure_bounds(pressure);
         let temperature_bounds = self.find_temperature_bounds(temperature);
 
-        let water_point_0_0 = self.get_water_point(pressure_bounds.0, temperature_bounds.0);
-        let water_point_0_1 = self.get_water_point(pressure_bounds.0, temperature_bounds.1);
-        let water_point_1_0 = self.get_water_point(pressure_bounds.1, temperature_bounds.0);
-        let water_point_1_1 = self.get_water_point(pressure_bounds.1, temperature_bounds.1);
+        let water_point_0_0 = self.get_water_point(pressure_bounds.0, temperature_bounds.0)?;
+        let water_point_0_1 = self.get_water_point(pressure_bounds.0, temperature_bounds.1)?;
+        let water_point_1_0 = self.get_water_point(pressure_bounds.1, temperature_bounds.0)?;
+        let water_point_1_1 = self.get_water_point(pressure_bounds.1, temperature_bounds.1)?;
 
-        let interpolated_water_point = interpolate_water_points(
-            pressure,
-            temperature,
-            water_point_0_0,
-            water_point_0_1,
-            water_point_1_0,
-            water_point_1_1,
-        );
+        let interpolated_water_point = if !phase_change_occurs((
+            water_point_0_0.clone(),
+            water_point_0_1.clone(),
+            water_point_1_0.clone(),
+            water_point_1_1.clone(),
+        )) {
+            interpolate_water_points(
+                pressure,
+                temperature,
+                water_point_0_0,
+                water_point_0_1,
+                water_point_1_0,
+                water_point_1_1,
+            )
+        } else {
+            get_nearest_water_point(
+                pressure,
+                temperature,
+                (
+                    water_point_0_0,
+                    water_point_0_1,
+                    water_point_1_0,
+                    water_point_1_1,
+                ),
+            )
+        };
+
+        Ok(interpolated_water_point)
+    }
+
+    pub fn get_labelled_values_at_point(
+        &self,
+        pressure: f32,
+        temperature: f32,
+    ) -> Result<Vec<(String, String)>, Error> {
+        let interpolated_water_point = self.get_values_at_point(pressure, temperature)?;
 
         Ok(self.convert_water_point_to_labelled_data(interpolated_water_point))
     }
@@ -66,12 +94,20 @@ impl WaterTable {
         (upper_bound, lower_bound)
     }
 
-    fn get_water_point(&self, pressure: f32, temperature: f32) -> WaterPoint {
+    fn get_water_point(&self, pressure: f32, temperature: f32) -> Result<WaterPoint, Error> {
         let water_point = self.value_points.iter().find(|value_point| {
             value_point.point.0 == pressure && value_point.point.1 == temperature
         });
 
-        water_point.unwrap().clone()
+        if let Some(point) = water_point {
+            Ok(point.clone())
+        } else {
+            let err_str = format!(
+                "Could not find point corresponding to P = {}, T = {}",
+                pressure, temperature
+            );
+            Err(Error::TableParsingError(err_str))
+        }
     }
 
     fn find_temperature_bounds(&self, target: f32) -> (f32, f32) {

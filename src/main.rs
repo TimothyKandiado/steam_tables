@@ -45,16 +45,20 @@ fn water_table() {
     let water_table =
         water::WaterTable::new(data::COMPRESSED_LIQUID_SUPERHEATED_STEAM.to_string()).unwrap();
 
-    let properties = water_table.get_values_at_point(0.1, 50.0).unwrap();
+    let properties = water_table.get_labelled_values_at_point(0.1, 50.0).unwrap();
     print_data(properties);
 
-    let properties = water_table.get_values_at_point(1.1, 500.0).unwrap();
+    let properties = water_table
+        .get_labelled_values_at_point(1.1, 500.0)
+        .unwrap();
     print_data(properties);
 
-    let properties = water_table.get_values_at_point(2.0, 50.0).unwrap();
+    let properties = water_table.get_labelled_values_at_point(2.0, 50.0).unwrap();
     print_data(properties);
 
-    let properties = water_table.get_values_at_point(0.02, 500.0).unwrap();
+    let properties = water_table
+        .get_labelled_values_at_point(0.02, 500.0)
+        .unwrap();
     print_data(properties);
 }
 fn print_data<T, K>(data: Vec<(T, K)>)

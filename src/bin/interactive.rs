@@ -159,7 +159,7 @@ fn query_water(
 
     let query_result = table_holder
         .water_table
-        .get_values_at_point(pressure, temperature);
+        .get_labelled_values_at_point(pressure, temperature);
 
     match query_result {
         Ok(result) => {

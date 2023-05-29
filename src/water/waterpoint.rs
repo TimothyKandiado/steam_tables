@@ -94,3 +94,46 @@ pub fn interpolate_water_points(
         phase: water_point_0_0.phase,
     }
 }
+
+pub fn phase_change_occurs(water_points: (WaterPoint, WaterPoint, WaterPoint, WaterPoint)) -> bool {
+    if water_points.0.phase != water_points.1.phase
+        || water_points.0.phase != water_points.2.phase
+        || water_points.0.phase != water_points.3.phase
+    {
+        return true;
+    }
+
+    false
+}
+
+pub fn get_nearest_water_point(
+    pressure: f32,
+    temperature: f32,
+    water_points: (WaterPoint, WaterPoint, WaterPoint, WaterPoint),
+) -> WaterPoint {
+    let mut nearest = water_points.0.clone();
+    let mut cur_score =
+        (nearest.point.0 - pressure).powi(2) + (nearest.point.1 - temperature).powi(2);
+
+    let new_score = (water_points.1.point.0 - pressure).powi(2)
+        + (water_points.1.point.1 - temperature).powi(2);
+    if new_score < cur_score {
+        nearest = water_points.1.clone();
+        cur_score = new_score;
+    }
+
+    let new_score = (water_points.2.point.0 - pressure).powi(2)
+        + (water_points.2.point.1 - temperature).powi(2);
+    if new_score < cur_score {
+        nearest = water_points.2.clone();
+        cur_score = new_score;
+    }
+
+    let new_score = (water_points.3.point.0 - pressure).powi(2)
+        + (water_points.3.point.1 - temperature).powi(2);
+    if new_score < cur_score {
+        nearest = water_points.3.clone();
+    }
+
+    nearest
+}
