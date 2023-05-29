@@ -11,15 +11,15 @@ fn main() {
 fn pressure_table() {
     let steam_table = SteamTable::new(data::SATURATED_BY_PRESSURE_TABLE.to_string()).unwrap();
 
-    let values = steam_table.get_values_at_point(1.0).unwrap();
+    let values = steam_table.get_labelled_values_at_point(1.0).unwrap();
 
     print_data(values);
 
-    let values = steam_table.get_values_at_point(2.0).unwrap();
+    let values = steam_table.get_labelled_values_at_point(2.0).unwrap();
 
     print_data(values);
 
-    let values = steam_table.get_values_at_point(5.0).unwrap();
+    let values = steam_table.get_labelled_values_at_point(5.0).unwrap();
 
     print_data(values);
 }
@@ -27,15 +27,15 @@ fn pressure_table() {
 fn temperature_table() {
     let steam_table = SteamTable::new(data::SATURATED_BY_TEMPERATURE_TABLE.to_string()).unwrap();
 
-    let values = steam_table.get_values_at_point(0.01).unwrap();
+    let values = steam_table.get_labelled_values_at_point(0.01).unwrap();
 
     print_data(values);
 
-    let values = steam_table.get_values_at_point(100.0).unwrap();
+    let values = steam_table.get_labelled_values_at_point(100.0).unwrap();
 
     print_data(values);
 
-    let values = steam_table.get_values_at_point(373.946).unwrap();
+    let values = steam_table.get_labelled_values_at_point(373.946).unwrap();
 
     print_data(values);
 }

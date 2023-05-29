@@ -210,11 +210,11 @@ fn query_saturated_steam_at_parameter(
     let query_result = if parameter_name == "temperature" {
         table_holder
             .saturated_by_temperature_table
-            .get_values_at_point(parameter_value)
+            .get_labelled_values_at_point(parameter_value)
     } else {
         table_holder
             .saturated_by_pressure_table
-            .get_values_at_point(parameter_value)
+            .get_labelled_values_at_point(parameter_value)
     };
 
     if let Err(query) = query_result {

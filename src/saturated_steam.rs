@@ -27,13 +27,17 @@ impl SteamTable {
         Ok(steam_table)
     }
 
-    pub fn get_values_at_point(&self, point: f32) -> Result<Vec<(String, f32)>, Error> {
+    pub fn get_values_at_point(&self, point: f32) -> Result<DataPoint, Error> {
         self.is_point_valid(point)?;
 
         let (min_data_point, max_data_point) = self.get_bounding_points(point);
 
-        let data_point = interpolate_data_points(point, min_data_point, max_data_point);
+        Ok(interpolate_data_points(point, min_data_point, max_data_point))
+    }
 
+    pub fn get_labelled_values_at_point(&self, point: f32) -> Result<Vec<(String, f32)>, Error> {
+        
+        let data_point = self.get_values_at_point(point)?;
         Ok(self.merge_header_with_data_point(data_point))
     }
 

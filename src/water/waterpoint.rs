@@ -132,7 +132,7 @@ pub fn get_nearest_water_point(
     let new_score = (water_points.3.point.0 - pressure).powi(2)
         + (water_points.3.point.1 - temperature).powi(2);
     if new_score < cur_score {
-        nearest = water_points.3.clone();
+        nearest = water_points.3;
     }
 
     nearest
