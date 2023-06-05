@@ -7,6 +7,7 @@ description = "Utility for querying properties of steam with automatic interpola
 homepage = "https://github.com/TimothyKandiado/steam_tables"
 keywords = ["chemical engineering", "steam table", "thermodynamics"]
 categories = [ "science" ]
+exclude = ".vscode/"
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
