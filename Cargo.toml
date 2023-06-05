@@ -2,6 +2,12 @@
 name = "steam_tables"
 version = "1.1.0"
 edition = "2021"
+license-file = "Licence"
+description = "Utility for querying properties of steam with automatic interpolation"
+homepage = "https://github.com/TimothyKandiado/steam_tables"
+keywords = ["chemical engineering", "steam table", "thermodynamics"]
+categories = [ "science" ]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
